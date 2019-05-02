@@ -5,6 +5,7 @@
 // PVector = coordinates pair from 0,0 (top right corner)
 
 Rocket serenity;
+final int LIFETIME = 100;
 
 void setup() {
 	size(1200, 1200);
@@ -13,24 +14,21 @@ void setup() {
 
 void draw() {
 	background(42, 160, 255);
-	serenity.update();
+	serenity.run();
 	serenity.display();
 }
 
-void keyPressed() {
-	if (keyCode == RIGHT) {
-		serenity.applyForce(new PVector(5,0));
-	}
-	if (keyCode == LEFT) {
-		serenity.applyForce(new PVector(-5,0));
-	}
-	if (keyCode == UP) {
-		serenity.applyForce(new PVector(0,-5));
-	}
-	if (keyCode == DOWN) {
-		serenity.applyForce(new PVector(0,5));
-	}
-}
-void keyHeld() {
-	
-}
+// void keyPressed() {
+// 	if (keyCode == RIGHT) {
+// 		serenity.applyForce(new PVector(5,0));
+// 	}
+// 	if (keyCode == LEFT) {
+// 		serenity.applyForce(new PVector(-5,0));
+// 	}
+// 	if (keyCode == UP) {
+// 		serenity.applyForce(new PVector(0,-5));
+// 	}
+// 	if (keyCode == DOWN) {
+// 		serenity.applyForce(new PVector(0,5));
+// 	}
+// }

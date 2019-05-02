@@ -14,11 +14,23 @@ class Rocket {
 
 	float size;
 
+	DNA dna;
+
+	float size;
+	float fitness;
+	int geneCounter = 0;
+
 	Rocket(PVector location) {
 		acceleration = new PVector();
 		velocity = new PVector();
 		position = location.get();
 		size = 4;
+	}
+
+	void run() {
+		applyForce(dna.genes[geneCounter]);
+		geneCounter++;
+		update();
 	}
 
 	// Tell rocket what force to apply every frame

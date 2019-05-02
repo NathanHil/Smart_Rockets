@@ -21,6 +21,7 @@ public class Smart_Rockets extends PApplet {
 // PVector = coordinates pair from 0,0 (top right corner)
 
 Rocket serenity;
+final int LIFETIME = 100;
 
 public void setup() {
 	
@@ -47,13 +48,18 @@ public void keyPressed() {
 		serenity.applyForce(new PVector(0,5));
 	}
 }
-class DNA {
-	float[] genes;
+public void keyHeld() {
 
-	DNA(int num) {
-		genes = new float[num];
-		for ( int i = 0; i < genes.length; i++) {
-			genes[i] = PApplet.parseFloat(1);
+}
+class DNA {
+	PVector[] genes;
+	float maxForce = 0.1f;
+
+	DNA() {
+		genes = new PVector[LIFETIME];
+		for (int i = 0; i < genes.length; i++) {
+			genes[i] = PVector.random2D();
+			genes[i].mult(random(0, maxForce));
 		}
 	}
 }
@@ -84,6 +90,13 @@ class Rocket {
 	public void applyForce(PVector f) {
 		acceleration.add(f);
 	}
+
+	public float fitness() {
+		float distance = PVector.dist(position, target);
+		// Return how far the end is from the goal
+		return 1.0f / distance;
+	}
+
 
 	// Always telling every single rocket to update position based on velocity every single frame
 	public void update() {
