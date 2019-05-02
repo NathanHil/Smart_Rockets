@@ -18,5 +18,19 @@ void draw() {
 }
 
 void keyPressed() {
-	serenity.applyForce(new PVector(5, 0));
+	if (keyCode == RIGHT) {
+		serenity.applyForce(new PVector(5,0));
+	}
+	if (keyCode == LEFT) {
+		serenity.applyForce(new PVector(-5,0));
+	}
+	if (keyCode == UP) {
+		serenity.applyForce(new PVector(0,-5));
+	}
+	if (keyCode == DOWN) {
+		serenity.applyForce(new PVector(0,5));
+	}
+}
+void keyHeld() {
+	
 }

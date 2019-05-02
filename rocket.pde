@@ -26,6 +26,13 @@ class Rocket {
 		acceleration.add(f);
 	}
 
+	float fitness() {
+		float distance = PVector.dist(position, target);
+		// Return how far the end is from the goal
+		return 1.0 / distance;
+	}
+
+
 	// Always telling every single rocket to update position based on velocity every single frame
 	void update() {
 		velocity.add(acceleration);

@@ -29,9 +29,23 @@ public void setup() {
 
 public void draw() {
 	background(42, 160, 255);
-	serenity.applyForce(new PVector(0.1f, 0));
 	serenity.update();
 	serenity.display();
+}
+
+public void keyPressed() {
+	if (keyCode == RIGHT) {
+		serenity.applyForce(new PVector(5,0));
+	}
+	if (keyCode == LEFT) {
+		serenity.applyForce(new PVector(-5,0));
+	}
+	if (keyCode == UP) {
+		serenity.applyForce(new PVector(0,-5));
+	}
+	if (keyCode == DOWN) {
+		serenity.applyForce(new PVector(0,5));
+	}
 }
 class DNA {
 	float[] genes;

@@ -1,10 +1,12 @@
 class DNA {
-	float[] genes;
+	PVector[] genes;
+	float maxForce = 0.1;
 
-	DNA(int num) {
-		genes = new float[num];
-		for ( int i = 0; i < genes.length; i++) {
-			genes[i] = float(1);
+	DNA() {
+		genes = new PVector[lifetime];
+		for (int i = 0; i < genes.length; i++) {
+			genes[i] = PVector.random2D();
+			genes[i].mult(random(0, maxForce));
 		}
 	}
 }
