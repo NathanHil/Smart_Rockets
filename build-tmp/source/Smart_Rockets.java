@@ -14,13 +14,11 @@ import java.io.IOException;
 
 public class Smart_Rockets extends PApplet {
 
-// Position = Where the rocket is currently
-// Speed (velocity) = distance/time
-// Acceleration = Speed/time
-// Force = direction of acceleration
-// PVector = coordinates pair from 0,0 (top right corner)
+// Modified from Shiffman's Nature of Code
+// https://natureofcode.com/book/chapter-9-the-evolution-of-code/
 
-final int LIFETIME = 100;
+
+final int LIFETIME = 500; // Hardcoded time to live
 
 Population population; // Collection of rockets
 
@@ -111,25 +109,19 @@ class Population {
 		}
 	}
 }
-// Yong's Rocket class from
+// Used Yong's Rocket class as base
 //https://gist.github.com/ybakos/f8a88da3cf382ba707c20277aa38ef71
 
 class Rocket {
-
-	// Position = Where the rocket is currently
-	// Speed (velocity) = distance/time
-	// Acceleration = Speed/time
-	// Force = direction of acceleration
-
+	// Declare all variables
 	PVector position;
 	PVector velocity;
 	PVector acceleration;
-
-	DNA dna;
-
 	float size;
 	float fitness;
 	int geneCounter = 0;
+	DNA dna;
+	boolean hitTarget;
 
 	Rocket(PVector location, DNA newDNA) {
 		acceleration = new PVector();
@@ -140,7 +132,7 @@ class Rocket {
 	}
 
 	public float fitness() {
-		float dist = PVector.dist(position, target);
+		float dist = dist(position.x, position.y, target.x, target.y);
 		// Return how far the end is from the goal
 		return pow(1.0f / dist, 2);
 	}
@@ -186,6 +178,14 @@ class Rocket {
 		endShape();
 
 		popMatrix();
+	}
+
+	// Getters
+	public float getFitness() {
+		return fitness;
+	}
+	public DNA getDNA() {
+		return dna;
 	}
 
 }

@@ -1,22 +1,16 @@
-// Yong's Rocket class from
+// Used Yong's Rocket class as base
 //https://gist.github.com/ybakos/f8a88da3cf382ba707c20277aa38ef71
 
 class Rocket {
-
-	// Position = Where the rocket is currently
-	// Speed (velocity) = distance/time
-	// Acceleration = Speed/time
-	// Force = direction of acceleration
-
+	// Declare all variables
 	PVector position;
 	PVector velocity;
 	PVector acceleration;
-
-	DNA dna;
-
 	float size;
 	float fitness;
 	int geneCounter = 0;
+	DNA dna;
+	boolean hitTarget;
 
 	Rocket(PVector location, DNA newDNA) {
 		acceleration = new PVector();
@@ -27,7 +21,7 @@ class Rocket {
 	}
 
 	float fitness() {
-		float dist = PVector.dist(position, target);
+		float dist = dist(position.x, position.y, target.x, target.y);
 		// Return how far the end is from the goal
 		return pow(1.0 / dist, 2);
 	}
@@ -73,6 +67,14 @@ class Rocket {
 		endShape();
 
 		popMatrix();
+	}
+
+	// Getters
+	float getFitness() {
+		return fitness;
+	}
+	DNA getDNA() {
+		return dna;
 	}
 
 }

@@ -1,10 +1,8 @@
-// Position = Where the rocket is currently
-// Speed (velocity) = distance/time
-// Acceleration = Speed/time
-// Force = direction of acceleration
-// PVector = coordinates pair from 0,0 (top right corner)
+// Modified from Shiffman's Nature of Code
+// https://natureofcode.com/book/chapter-9-the-evolution-of-code/
 
-final int LIFETIME = 100;
+
+final int LIFETIME = 500; // Hardcoded time to live
 
 Population population; // Collection of rockets
 
