@@ -12,19 +12,24 @@ class Rocket {
 	PVector velocity;
 	PVector acceleration;
 
-	float size;
-
 	DNA dna;
 
 	float size;
 	float fitness;
 	int geneCounter = 0;
 
-	Rocket(PVector location) {
+	Rocket(PVector location, DNA newDNA) {
 		acceleration = new PVector();
 		velocity = new PVector();
 		position = location.get();
 		size = 4;
+		dna = newDNA;
+	}
+
+	float fitness() {
+		float dist = PVector.dist(position, target);
+		// Return how far the end is from the goal
+		return pow(1.0 / dist, 2);
 	}
 
 	void run() {
@@ -37,13 +42,6 @@ class Rocket {
 	void applyForce(PVector f) {
 		acceleration.add(f);
 	}
-
-	float fitness() {
-		float distance = PVector.dist(position, target);
-		// Return how far the end is from the goal
-		return 1.0 / distance;
-	}
-
 
 	// Always telling every single rocket to update position based on velocity every single frame
 	void update() {

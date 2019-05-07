@@ -20,35 +20,41 @@ public class Smart_Rockets extends PApplet {
 // Force = direction of acceleration
 // PVector = coordinates pair from 0,0 (top right corner)
 
-Rocket serenity;
 final int LIFETIME = 100;
+
+Population population; // Collection of rockets
+
+int lifeCounter; // How many cycles have passed
+
+PVector target; // Where the rocket is trying to go
 
 public void setup() {
 	
-	serenity = new Rocket(new PVector(200, 400));
+
+	lifeCounter = 0;
+	target = new PVector(width/2, 24);
+	float mutationRate = 0.01f;
+	population = new Population(mutationRate, 50);
 }
 
 public void draw() {
 	background(42, 160, 255);
-	serenity.update();
-	serenity.display();
-}
 
-public void keyPressed() {
-	if (keyCode == RIGHT) {
-		serenity.applyForce(new PVector(5,0));
+	// Draw the target
+	fill(255);
+	ellipse(target.x,target.y,24,24);
+
+	// While the lifecycle is less than the time to live, keep going
+	if (lifeCounter < LIFETIME) {
+		population.live();
+		lifeCounter++;
 	}
-	if (keyCode == LEFT) {
-		serenity.applyForce(new PVector(-5,0));
+	// otherwise, Star Trek Next Generation
+	else {
+		population.fitness();
+		population.selection();
+		population.reproduce();
 	}
-	if (keyCode == UP) {
-		serenity.applyForce(new PVector(0,-5));
-	}
-	if (keyCode == DOWN) {
-		serenity.applyForce(new PVector(0,5));
-	}
-}
-public void keyHeld() {
 
 }
 class DNA {
@@ -60,6 +66,48 @@ class DNA {
 		for (int i = 0; i < genes.length; i++) {
 			genes[i] = PVector.random2D();
 			genes[i].mult(random(0, maxForce));
+		}
+	}
+}
+class Population {
+
+	float mutationRate;
+	Rocket[] fleet;
+	ArrayList<Rocket> matingPool;
+	int generations;
+
+	Population(float m, int num) {
+		mutationRate = m;
+		fleet = new Rocket[num];
+		matingPool = new ArrayList<Rocket>();
+		generations = 0;
+
+		//make a new set of rockets
+		for (int i = 0; i < fleet.length; i++) {
+			PVector position = new PVector(width/2,height+20);
+			fleet[i] = new Rocket(position, new DNA());
+		}
+	}
+
+	// Find the fitness of the rocket
+	public void fitness() {
+
+	}
+
+	// Generate natural selection mating pool
+	public void selection() {
+
+	}
+
+	// Create the next generation of rockets
+	public void reproduce() {
+
+	}
+
+	public void live() {
+		// Run all the rockets in the population
+		for (int i = 0; i < fleet.length; i++) {
+			fleet[i].run();
 		}
 	}
 }
@@ -77,26 +125,36 @@ class Rocket {
 	PVector velocity;
 	PVector acceleration;
 
-	float size;
+	DNA dna;
 
-	Rocket(PVector location) {
+	float size;
+	float fitness;
+	int geneCounter = 0;
+
+	Rocket(PVector location, DNA newDNA) {
 		acceleration = new PVector();
 		velocity = new PVector();
 		position = location.get();
 		size = 4;
+		dna = newDNA;
+	}
+
+	public float fitness() {
+		float dist = PVector.dist(position, target);
+		// Return how far the end is from the goal
+		return pow(1.0f / dist, 2);
+	}
+
+	public void run() {
+		applyForce(dna.genes[geneCounter]);
+		geneCounter++;
+		update();
 	}
 
 	// Tell rocket what force to apply every frame
 	public void applyForce(PVector f) {
 		acceleration.add(f);
 	}
-
-	public float fitness() {
-		float distance = PVector.dist(position, target);
-		// Return how far the end is from the goal
-		return 1.0f / distance;
-	}
-
 
 	// Always telling every single rocket to update position based on velocity every single frame
 	public void update() {

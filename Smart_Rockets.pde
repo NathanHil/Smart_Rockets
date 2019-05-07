@@ -4,16 +4,40 @@
 // Force = direction of acceleration
 // PVector = coordinates pair from 0,0 (top right corner)
 
-Rocket serenity;
 final int LIFETIME = 100;
+
+Population population; // Collection of rockets
+
+int lifeCounter; // How many cycles have passed
+
+PVector target; // Where the rocket is trying to go
 
 void setup() {
 	size(1200, 1200);
-	serenity = new Rocket(new PVector(200, 400));
+
+	lifeCounter = 0;
+	target = new PVector(width/2, 24);
+	float mutationRate = 0.01;
+	population = new Population(mutationRate, 50);
 }
 
 void draw() {
 	background(42, 160, 255);
-	serenity.run();
-	serenity.display();
+
+	// Draw the target
+	fill(255);
+	ellipse(target.x,target.y,24,24);
+
+	// While the lifecycle is less than the time to live, keep going
+	if (lifeCounter < LIFETIME) {
+		population.live();
+		lifeCounter++;
+	}
+	// otherwise, Star Trek Next Generation
+	else {
+		population.fitness();
+		population.selection();
+		population.reproduce();
+	}
+
 }
