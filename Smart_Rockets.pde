@@ -38,4 +38,10 @@ void draw() {
 		population.reproduce();
 	}
 
+
+	// Display some debug info
+	fill(0);
+	text("Generation: " + population.getGenerations(), 10, 18);
+	text("Cycles left: " + (LIFETIME-lifeCounter), 10, 36);
+
 }

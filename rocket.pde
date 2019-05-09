@@ -12,6 +12,7 @@ class Rocket {
 	DNA dna;
 	boolean hitTarget;
 
+	// Constructor
 	Rocket(PVector location, DNA newDNA) {
 		acceleration = new PVector();
 		velocity = new PVector();
@@ -46,7 +47,7 @@ class Rocket {
 
 	void display() {
 		float theta = velocity.heading2D() + PI/2;
-		fill(200, 100);
+		fill(100, 200);
 		stroke(255); // Color of rocket
 		pushMatrix(); // Keep track of state to pop later
 		translate(position.x, position.y); // Move to rocket's position

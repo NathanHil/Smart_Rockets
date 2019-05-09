@@ -54,16 +54,57 @@ public void draw() {
 		population.reproduce();
 	}
 
+
+	// Display some debug info
+	fill(0);
+	text("Generation: " + population.getGenerations(), 10, 18);
+	text("Cycles left: " + (LIFETIME-lifeCounter), 10, 36);
+
 }
 class DNA {
 	PVector[] genes;
 	float maxForce = 0.1f;
 
+	// Constructor to build default DNA
 	DNA() {
 		genes = new PVector[LIFETIME];
 		for (int i = 0; i < genes.length; i++) {
 			genes[i] = PVector.random2D();
 			genes[i].mult(random(0, maxForce));
+		}
+	}
+
+	// Second constructor for mutated DNA
+	DNA(PVector[] newgenes) {
+		genes = newgenes;
+	}
+
+	public DNA merge(DNA partner) {
+		// Flip a coin
+		int rand = PApplet.parseInt(random(100));
+		PVector[] child = new PVector[genes.length];
+		// Merge on random coin flip
+		for (int i = 0; i < genes.length; i++) {
+			if (rand%2 == 0) {
+				child[i] = genes[i];
+			}
+			else {
+				child[i] = partner.genes[i];
+			}
+		}    
+		DNA newgenes = new DNA(child);
+		return newgenes;
+	}
+
+	// Mutate the DNA of the genes
+	public void mutate(float mutation) {
+		for (int i = 0; i < genes.length; i++) {
+			if (random(1) < mutation) {
+				// New random angle
+				float angle = random(TWO_PI);
+				genes[i] = new PVector(cos(angle), sin(angle));
+				genes[i].mult(random(0, maxForce));
+			}
 		}
 	}
 }
@@ -99,14 +140,33 @@ class Population {
 
 	// Create the next generation of rockets
 	public void reproduce() {
+	// Go through the whole population and replace everything with the new generation
+	for (int i = 0; i < fleet.length; i++) {
+		int m = PApplet.parseInt(random(matingPool.size()));
+		int d = PApplet.parseInt(random(matingPool.size()));
+		Rocket mom = matingPool.get(m);
+		Rocket dad = matingPool.get(d);
 
+		DNA momgenes = mom.getDNA();
+		DNA dadgenes = dad.getDNA();
+		DNA child = momgenes.merge(dadgenes);
+		child.mutate(mutationRate);
+		PVector position = new PVector(width/2,height+20);
+		fleet[i] = new Rocket(position, child);
 	}
+	generations++;
+  }
 
 	public void live() {
 		// Run all the rockets in the population
 		for (int i = 0; i < fleet.length; i++) {
 			fleet[i].run();
 		}
+	}
+
+	// Getter
+	public int getGenerations() {
+		return generations;
 	}
 }
 // Used Yong's Rocket class as base
@@ -123,6 +183,7 @@ class Rocket {
 	DNA dna;
 	boolean hitTarget;
 
+	// Constructor
 	Rocket(PVector location, DNA newDNA) {
 		acceleration = new PVector();
 		velocity = new PVector();
@@ -157,7 +218,7 @@ class Rocket {
 
 	public void display() {
 		float theta = velocity.heading2D() + PI/2;
-		fill(200, 100);
+		fill(100, 200);
 		stroke(255); // Color of rocket
 		pushMatrix(); // Keep track of state to pop later
 		translate(position.x, position.y); // Move to rocket's position
