@@ -60,8 +60,9 @@ public void draw() {
 
 	// Display some debug info
 	fill(0);
-	text("Generation: " + population.getGenerations(), 10, 18);
-	text("Cycles left: " + (LIFETIME-lifeCounter), 10, 36);
+	textSize(30);
+	text("Generation: " + population.getGenerations(), 10, 40);
+	text("Cycles left: " + (LIFETIME-lifeCounter), 10, 80);
 
 }
 class DNA {
@@ -216,7 +217,7 @@ class Rocket {
 		acceleration = new PVector();
 		velocity = new PVector();
 		position = location.get();
-		size = 4;
+		size = 8;
 		dna = newDNA;
 	}
 
@@ -291,7 +292,7 @@ class Rocket {
 	}
 
 }
-  public void settings() { 	size(600, 300); }
+  public void settings() { 	size(1200, 600); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Smart_Rockets" };
     if (passedArgs != null) {

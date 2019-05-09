@@ -11,7 +11,7 @@ int lifeCounter; // How many cycles have passed
 PVector target; // Where the rocket is trying to go
 
 void setup() {
-	size(600, 300);
+	size(1200, 600);
 
 	lifeCounter = 0;
 	target = new PVector(width/2, 24);
@@ -44,7 +44,8 @@ void draw() {
 
 	// Display some debug info
 	fill(0);
-	text("Generation: " + population.getGenerations(), 10, 18);
-	text("Cycles left: " + (LIFETIME-lifeCounter), 10, 36);
+	textSize(30);
+	text("Generation: " + population.getGenerations(), 10, 40);
+	text("Cycles left: " + (LIFETIME-lifeCounter), 10, 80);
 
 }

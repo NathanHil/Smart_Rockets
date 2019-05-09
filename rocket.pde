@@ -17,7 +17,7 @@ class Rocket {
 		acceleration = new PVector();
 		velocity = new PVector();
 		position = location.get();
-		size = 4;
+		size = 8;
 		dna = newDNA;
 	}
 
