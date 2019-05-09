@@ -35,8 +35,10 @@ public void setup() {
 	population = new Population(mutationRate, 50);
 }
 
+// Runs every frame
 public void draw() {
-	background(42, 160, 255);
+	background(42, 160, 255); // Blue
+	//background(0); // Black
 
 	// Draw the target
 	fill(255);
@@ -49,6 +51,7 @@ public void draw() {
 	}
 	// otherwise, Star Trek Next Generation
 	else {
+		lifeCounter = 0; // Make sure there's no overflow
 		population.fitness();
 		population.selection();
 		population.reproduce();
@@ -111,62 +114,87 @@ class DNA {
 class Population {
 
 	float mutationRate;
-	Rocket[] fleet;
+	Rocket[] population;
 	ArrayList<Rocket> matingPool;
 	int generations;
 
+	// Initialize the population
 	Population(float m, int num) {
 		mutationRate = m;
-		fleet = new Rocket[num];
+		population = new Rocket[num];
 		matingPool = new ArrayList<Rocket>();
 		generations = 0;
 
 		//make a new set of rockets
-		for (int i = 0; i < fleet.length; i++) {
+		for (int i = 0; i < population.length; i++) {
 			PVector position = new PVector(width/2,height+20);
-			fleet[i] = new Rocket(position, new DNA());
+			population[i] = new Rocket(position, new DNA());
+		}
+	}
+
+	public void live() {
+		// Run all the rockets in the population
+		for (int i = 0; i < population.length; i++) {
+			population[i].run();
 		}
 	}
 
 	// Find the fitness of the rocket
 	public void fitness() {
-
+		for (int i = 0; i < population.length; i++) {
+			population[i].fitness();
+		}
 	}
 
 	// Generate natural selection mating pool
 	public void selection() {
+		// Reset mating pool
+		matingPool.clear();
+		// Find the maximum fitness in the pool
+		float maxFitness = getMaxFitness();
 
+		for (int i = 0; i < population.length; i++) {
+			float fitnessNormal = map(population[i].getFitness(),0,maxFitness,0,1);
+			int n = (int) (fitnessNormal * 100);  // Arbitrary multiplier
+			for (int j = 0; j < n; j++) {
+				matingPool.add(population[i]);
+			}
+		}
 	}
 
 	// Create the next generation of rockets
 	public void reproduce() {
-	// Go through the whole population and replace everything with the new generation
-	for (int i = 0; i < fleet.length; i++) {
-		int m = PApplet.parseInt(random(matingPool.size()));
-		int d = PApplet.parseInt(random(matingPool.size()));
-		Rocket mom = matingPool.get(m);
-		Rocket dad = matingPool.get(d);
+		// Go through the whole population and replace everything with the new generation
+		for (int i = 0; i < population.length; i++) {
+			int m = PApplet.parseInt(random(matingPool.size()));
+			int d = PApplet.parseInt(random(matingPool.size()));
+			Rocket mom = matingPool.get(m);
+			Rocket dad = matingPool.get(d);
 
-		DNA momgenes = mom.getDNA();
-		DNA dadgenes = dad.getDNA();
-		DNA child = momgenes.merge(dadgenes);
-		child.mutate(mutationRate);
-		PVector position = new PVector(width/2,height+20);
-		fleet[i] = new Rocket(position, child);
-	}
-	generations++;
-  }
-
-	public void live() {
-		// Run all the rockets in the population
-		for (int i = 0; i < fleet.length; i++) {
-			fleet[i].run();
+			DNA momgenes = mom.getDNA();
+			DNA dadgenes = dad.getDNA();
+			DNA child = momgenes.merge(dadgenes);
+			child.mutate(mutationRate);
+			PVector position = new PVector(width/2,height+20);
+			population[i] = new Rocket(position, child);
 		}
-	}
+		generations++;
+ 	 }
 
 	// Getter
 	public int getGenerations() {
 		return generations;
+	}
+
+	// Find best fitting rocket from the population
+	public float getMaxFitness() {
+		float record = 0;
+		for (int i = 0; i < population.length; i++) {
+			if(population[i].getFitness() > record) {
+				record = population[i].getFitness();
+			}
+		}
+		return record;
 	}
 }
 // Used Yong's Rocket class as base
@@ -181,7 +209,7 @@ class Rocket {
 	float fitness;
 	int geneCounter = 0;
 	DNA dna;
-	boolean hitTarget;
+	boolean hitTarget = false;
 
 	// Constructor
 	Rocket(PVector location, DNA newDNA) {
@@ -192,16 +220,28 @@ class Rocket {
 		dna = newDNA;
 	}
 
-	public float fitness() {
+	public void fitness() {
 		float dist = dist(position.x, position.y, target.x, target.y);
 		// Return how far the end is from the goal
-		return pow(1.0f / dist, 2);
+		fitness = pow(1.0f / dist, 2);
 	}
 
 	public void run() {
-		applyForce(dna.genes[geneCounter]);
-		geneCounter++;
-		update();
+		checkTarget(); // Did we hit it?
+		if (!hitTarget) {
+			applyForce(dna.genes[geneCounter]);
+			geneCounter = (geneCounter + 1) % dna.genes.length;
+			update();
+		}
+		display(); // I forgot this before...
+	}
+
+	// Did I make it to the target?
+	public void checkTarget() {
+		float distanceToTarget = dist(position.x, position.y, target.x, target.y);
+		if (distanceToTarget < 12) {
+			hitTarget = true;
+		}
 	}
 
 	// Tell rocket what force to apply every frame
@@ -216,6 +256,7 @@ class Rocket {
 		acceleration.mult(0); // Reset to 0 so doesn't accelerate forever
 	}
 
+	// Actually draw the darn things...
 	public void display() {
 		float theta = velocity.heading2D() + PI/2;
 		fill(100, 200);
@@ -250,7 +291,7 @@ class Rocket {
 	}
 
 }
-  public void settings() { 	size(1200, 1200); }
+  public void settings() { 	size(1200, 600); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Smart_Rockets" };
     if (passedArgs != null) {

@@ -10,7 +10,7 @@ class Rocket {
 	float fitness;
 	int geneCounter = 0;
 	DNA dna;
-	boolean hitTarget;
+	boolean hitTarget = false;
 
 	// Constructor
 	Rocket(PVector location, DNA newDNA) {
@@ -21,16 +21,28 @@ class Rocket {
 		dna = newDNA;
 	}
 
-	float fitness() {
+	void fitness() {
 		float dist = dist(position.x, position.y, target.x, target.y);
 		// Return how far the end is from the goal
-		return pow(1.0 / dist, 2);
+		fitness = pow(1.0 / dist, 2);
 	}
 
 	void run() {
-		applyForce(dna.genes[geneCounter]);
-		geneCounter++;
-		update();
+		checkTarget(); // Did we hit it?
+		if (!hitTarget) {
+			applyForce(dna.genes[geneCounter]);
+			geneCounter = (geneCounter + 1) % dna.genes.length;
+			update();
+		}
+		display(); // I forgot this before...
+	}
+
+	// Did I make it to the target?
+	void checkTarget() {
+		float distanceToTarget = dist(position.x, position.y, target.x, target.y);
+		if (distanceToTarget < 12) {
+			hitTarget = true;
+		}
 	}
 
 	// Tell rocket what force to apply every frame
@@ -45,6 +57,7 @@ class Rocket {
 		acceleration.mult(0); // Reset to 0 so doesn't accelerate forever
 	}
 
+	// Actually draw the darn things...
 	void display() {
 		float theta = velocity.heading2D() + PI/2;
 		fill(100, 200);
