@@ -18,7 +18,7 @@ public class Smart_Rockets extends PApplet {
 // https://natureofcode.com/book/chapter-9-the-evolution-of-code/
 
 
-final int LIFETIME = 500; // Hardcoded time to live
+final int LIFETIME = 300; // Hardcoded time to live
 
 Population population; // Collection of rockets
 
@@ -127,7 +127,7 @@ class Population {
 
 		//make a new set of rockets
 		for (int i = 0; i < population.length; i++) {
-			PVector position = new PVector(width/2,height+20);
+			PVector position = new PVector(width/2,height-40);
 			population[i] = new Rocket(position, new DNA());
 		}
 	}
@@ -221,9 +221,9 @@ class Rocket {
 	}
 
 	public void fitness() {
-		float dist = dist(position.x, position.y, target.x, target.y);
+		float distanceToTarget = dist(position.x, position.y, target.x, target.y);
 		// Return how far the end is from the goal
-		fitness = pow(1.0f / dist, 2);
+		fitness = pow(1.0f / distanceToTarget, 2);
 	}
 
 	public void run() {
@@ -291,7 +291,7 @@ class Rocket {
 	}
 
 }
-  public void settings() { 	size(1200, 600); }
+  public void settings() { 	size(600, 300); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Smart_Rockets" };
     if (passedArgs != null) {

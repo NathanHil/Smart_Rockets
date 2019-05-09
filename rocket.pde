@@ -22,9 +22,9 @@ class Rocket {
 	}
 
 	void fitness() {
-		float dist = dist(position.x, position.y, target.x, target.y);
+		float distanceToTarget = dist(position.x, position.y, target.x, target.y);
 		// Return how far the end is from the goal
-		fitness = pow(1.0 / dist, 2);
+		fitness = pow(1.0 / distanceToTarget, 2);
 	}
 
 	void run() {

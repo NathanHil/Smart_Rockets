@@ -2,7 +2,7 @@
 // https://natureofcode.com/book/chapter-9-the-evolution-of-code/
 
 
-final int LIFETIME = 500; // Hardcoded time to live
+final int LIFETIME = 300; // Hardcoded time to live
 
 Population population; // Collection of rockets
 
@@ -11,7 +11,7 @@ int lifeCounter; // How many cycles have passed
 PVector target; // Where the rocket is trying to go
 
 void setup() {
-	size(1200, 600);
+	size(600, 300);
 
 	lifeCounter = 0;
 	target = new PVector(width/2, 24);
