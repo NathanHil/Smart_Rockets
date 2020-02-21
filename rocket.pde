@@ -17,7 +17,7 @@ class Rocket {
 		acceleration = new PVector();
 		velocity = new PVector();
 		position = location.get();
-		size = 8;
+		size = 13;
 		dna = newDNA;
 	}
 
@@ -54,7 +54,7 @@ class Rocket {
 	void update() {
 		velocity.add(acceleration);
 		position.add(velocity);
-		acceleration.mult(0); // Reset to 0 so doesn't accelerate forever
+		acceleration.mult(0.1); // Reset to 0 so doesn't accelerate forever
 	}
 
 	// Actually draw the darn things...

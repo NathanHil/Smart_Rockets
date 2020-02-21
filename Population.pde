@@ -14,7 +14,7 @@ class Population {
 
 		//make a new set of rockets
 		for (int i = 0; i < population.length; i++) {
-			PVector position = new PVector(width/2,height-40);
+			PVector position = new PVector(width/2,height-100);
 			population[i] = new Rocket(position, new DNA());
 		}
 	}
@@ -62,7 +62,7 @@ class Population {
 			DNA dadgenes = dad.getDNA();
 			DNA child = momgenes.merge(dadgenes);
 			child.mutate(mutationRate);
-			PVector position = new PVector(width/2,height+20);
+			PVector position = new PVector(width/2,height+40);
 			population[i] = new Rocket(position, child);
 		}
 		generations++;

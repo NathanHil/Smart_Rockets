@@ -11,7 +11,7 @@ int lifeCounter; // How many cycles have passed
 PVector target; // Where the rocket is trying to go
 
 void setup() {
-	size(1200, 600);
+	size(2400, 1200);
 
 	lifeCounter = 0;
 	target = new PVector(width/2, 24);
@@ -33,7 +33,7 @@ void draw() {
 		population.live();
 		lifeCounter++;
 	}
-	// otherwise, Star Trek Next Generation
+	// Otherwise, (Star Trek) Next Generation
 	else {
 		lifeCounter = 0; // Make sure there's no overflow
 		population.fitness();
